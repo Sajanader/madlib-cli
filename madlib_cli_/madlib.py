@@ -1,40 +1,46 @@
 import re
+def welcome():
+    print('welcome in madlib game/n just enter the answer and wait to see the result')
 
-print('you are welcome in madlib game')
-
-noun = input('Please enter a noun: ')
-verb= input('Please enter a past verb: ')
-verb2= input('Please enter a past verb: ')
-adj= input('Please enter an adjective: ')
-verb3= input('Please enter a past verb: ')
-adverb = input('Please enter an adverb: ')
-medlib=[noun,verb,verb2,adj,verb3,adverb]
-print('yesterday I cooked a' , noun , 'I ',verb, ' my dish then ',verb2, 'in the oven after that the meal was',adj,' and we' ,verb3,'it' ,adverb,)
 
 def read_template():
+    with open('assets/madlib_template.txt', 'r') as file:
+        content = file.read()
+    return content
 
-    with open('assets/madlib.txt','r') as file:
-        content=file.read().strip()
-      
+def parse(content):
+    y=[]
+    x = re.findall(r'\{.*?\}',content) 
+    print(x)
+    answers = re.sub("{[^}]*}", " {}", content)
+    print(answers)
+    for i in x:
+        y.append(i.strip("{ }"))
+    return y,answers  
 
-read_template()
-def parse():
-    with open('assets/madlib.txt','r') as file:
-         content=file.read().strip()
-         x= re.sub('{[^}]+}','{}',content)
+def merge(answers,m):
+  
+    z = answers.format(*m)
+    return z
+
+def copyFile(answers):
+    print()
+    print(answers)
+    file = open('assets/print.txt','w')
+    file.write(answers)
+
+
+
+
+if __name__ == "__main__":
+    welcome()
    
-         print(x)
-         y= re.findall('\{(.*?)\}', content)
-         y=medlib
-         c=str(y).strip('[]')
-         print(y[0])
-      
-         print(len(y))
-         for v in y:
-             j=re.sub('{}',v,x)
-            
-             print(j)
+    content = read_template()
+    y =parse(content)
     
-     
-
-parse()
+    m =[]
+    for v in y[0]:
+        q=input("please enter a:   " +v + " : " )
+        m.append(q)
+    copy = merge(y[1],m)
+    copyFile(copy)
